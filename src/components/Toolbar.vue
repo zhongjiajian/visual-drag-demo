@@ -24,6 +24,9 @@
                 <span>画布比例</span>
                 <input type="number" v-model="canvasStyleData.scale"> %
             </div>
+            <span class="line"></span>
+            <User class="user-component" />
+
         </div>
 
         <!-- 预览 -->
@@ -38,9 +41,10 @@ import { mapState } from 'vuex'
 import Preview from '@/components/Editor/Preview'
 import { commonStyle, commonAttr } from '@/custom-component/component-list'
 import eventBus from '@/utils/eventBus'
+import User from '@/components/User'
 
 export default {
-    components: { Preview },
+    components: { Preview, User },
     data() {
         return {
             isShowPreview: false,
@@ -163,12 +167,19 @@ export default {
 
 <style lang="scss" scoped>
 .toolbar {
-    padding: 15px 10px;
+    height: 64px;
+    padding: 0 10px;
+    display: flex;
     white-space: nowrap;
+    align-items: center;
     overflow-x: auto;
     background: #fff;
     border-bottom: 1px solid #ddd;
-
+    .line{
+        height: 20px;
+        border-right: 1px solid #ccc;
+        margin: 0 20px;
+    }
     .canvas-config {
         display: inline-block;
         margin-left: 10px;

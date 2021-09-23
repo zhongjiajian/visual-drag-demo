@@ -1,5 +1,6 @@
 <template>
     <div class="home">
+
         <Toolbar />
 
         <main>
@@ -43,6 +44,7 @@ import AnimationList from '@/components/AnimationList' // 右侧动画列表
 import EventList from '@/components/EventList' // 右侧事件列表
 import componentList from '@/custom-component/component-list' // 左侧列表数据
 import Toolbar from '@/components/Toolbar'
+
 import { deepCopy } from '@/utils/utils'
 import { mapState } from 'vuex'
 import generateID from '@/utils/generateID'
@@ -130,7 +132,6 @@ export default {
 .home {
     height: 100vh;
     background: #fff;
-
     main {
         height: calc(100% - 64px);
         position: relative;

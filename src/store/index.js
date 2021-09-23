@@ -8,6 +8,7 @@ import event from './event'
 import layer from './layer'
 import snapshot from './snapshot'
 import lock from './lock'
+import user from './user'
 
 Vue.use(Vuex)
 
@@ -21,6 +22,7 @@ const data = {
         ...layer.state,
         ...snapshot.state,
         ...lock.state,
+        ...user.state, // 登录态数据
 
         editMode: 'edit', // 编辑器模式 edit preview
         canvasStyleData: { // 页面全局数据
@@ -34,6 +36,7 @@ const data = {
         // 点击画布时是否点中组件，主要用于取消选中组件用。
         // 如果没点中组件，并且在画布空白处弹起鼠标，则取消当前组件的选中状态
         isClickComponent: false,
+
     },
     mutations: {
         ...animation.mutations,
@@ -44,6 +47,7 @@ const data = {
         ...layer.mutations,
         ...snapshot.mutations,
         ...lock.mutations,
+        ...user.mutations,
 
         setClickComponentStatus(state, status) {
             state.isClickComponent = status
