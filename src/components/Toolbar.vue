@@ -1,37 +1,67 @@
 <template>
-    <div>
-        <div class="toolbar">
-            <el-button @click="undo">撤消</el-button>
-            <el-button @click="redo">重做</el-button>
-            <label for="input" class="insert">插入图片</label>
-            <input type="file" @change="handleFileChange" id="input" hidden />
-            <el-button @click="preview" style="margin-left: 10px;">预览</el-button>
-            <el-button @click="save">保存</el-button>
-            <el-button @click="clearCanvas">清空画布</el-button>
-            <el-button @click="compose" :disabled="!areaData.components.length">组合</el-button>
-            <el-button @click="decompose"
-            :disabled="!curComponent || curComponent.isLock || curComponent.component != 'Group'">拆分</el-button>
+  <div>
+    <div class="toolbar">
+      <el-button @click="undo">撤消</el-button>
+      <el-button @click="redo">重做</el-button>
+      <label for="input" class="insert">插入图片</label>
+      <input type="file" @change="handleFileChange" id="input" hidden />
+      <el-button @click="preview" style="margin-left: 10px">预览</el-button>
+      <el-button @click="save">保存</el-button>
+      <el-button @click="clearCanvas">清空画布</el-button>
+      <el-button @click="compose" :disabled="!areaData.components.length"
+        >组合</el-button
+      >
+      <el-button
+        @click="decompose"
+        :disabled="
+          !curComponent ||
+          curComponent.isLock ||
+          curComponent.component != 'Group'
+        "
+        >拆分</el-button
+      >
 
-            <el-button @click="lock" :disabled="!curComponent || curComponent.isLock">锁定</el-button>
-            <el-button @click="unlock" :disabled="!curComponent || !curComponent.isLock">解锁</el-button>
-            <div class="canvas-config">
-                <span>画布大小</span>
-                <input v-model="canvasStyleData.width">
-                <span>*</span>
-                <input v-model="canvasStyleData.height">
-            </div>
-            <div class="canvas-config">
-                <span>画布比例</span>
-                <input type="number" v-model="canvasStyleData.scale"> %
-            </div>
-            <span class="line"></span>
-            <User class="user-component" />
-
+      <el-button @click="lock" :disabled="!curComponent || curComponent.isLock"
+        >锁定</el-button
+      >
+      <el-button
+        @click="unlock"
+        :disabled="!curComponent || !curComponent.isLock"
+        >解锁</el-button
+      >
+      <div class="canvas-config">
+        <span>画布大小</span>
+        <input v-model="canvasStyleData.width" />
+        <span>*</span>
+        <input v-model="canvasStyleData.height" />
+      </div>
+      <div class="canvas-config">
+        <span>画布比例</span>
+        <input type="number" v-model="canvasStyleData.scale" /> %
+      </div>
+      <span class="line"></span>
+      <el-button @click="update" size="mini" type="text">保存编辑</el-button>
+      <span class="line"></span>
+      <el-popover placement="bottom" width="200" trigger="hover">
+        <div>
+          <div>
+            <span>标题：{{pageInfo.title}}</span>
+            <span></span>
+          </div>
+          <div>
+            <span>创建人：{{pageInfo.uname}}</span>
+            <span></span>
+          </div>
         </div>
-
-        <!-- 预览 -->
-        <Preview v-model="isShowPreview" @change="handlePreviewChange" />
+        <i slot="reference" class="el-icon-info icon-info"></i>
+      </el-popover>
+      <span class="line"></span>
+      <User class="user-component" />
     </div>
+
+    <!-- 预览 -->
+    <Preview v-model="isShowPreview" @change="handlePreviewChange" />
+  </div>
 </template>
 
 <script>
@@ -45,6 +75,12 @@ import User from '@/components/User'
 
 export default {
     components: { Preview, User },
+    props: {
+        pageInfo: {
+            type: Object,
+        },
+        
+    },
     data() {
         return {
             isShowPreview: false,
@@ -71,7 +107,6 @@ export default {
         eventBus.$on('clearCanvas', this.clearCanvas)
     },
     methods: {
-
         lock() {
             this.$store.commit('lock')
         },
@@ -161,75 +196,83 @@ export default {
         handlePreviewChange() {
             this.$store.commit('setEditMode', 'edit')
         },
+
+        update() {
+            
+        },
     },
 }
 </script>
 
 <style lang="scss" scoped>
 .toolbar {
-    height: 64px;
-    padding: 0 10px;
-    display: flex;
+  height: 64px;
+  padding: 0 10px;
+  display: flex;
+  white-space: nowrap;
+  align-items: center;
+  overflow-x: auto;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  .line {
+    height: 20px;
+    border-right: 1px solid #ccc;
+    margin: 0 20px;
+  }
+  .canvas-config {
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 14px;
+    color: #606266;
+
+    input {
+      width: 50px;
+      margin-left: 10px;
+      outline: none;
+      padding: 0 5px;
+      border: 1px solid #ddd;
+      color: #606266;
+    }
+
+    span {
+      margin-left: 10px;
+    }
+  }
+
+  .insert {
+    display: inline-block;
+    line-height: 1;
     white-space: nowrap;
-    align-items: center;
-    overflow-x: auto;
+    cursor: pointer;
     background: #fff;
-    border-bottom: 1px solid #ddd;
-    .line{
-        height: 20px;
-        border-right: 1px solid #ccc;
-        margin: 0 20px;
-    }
-    .canvas-config {
-        display: inline-block;
-        margin-left: 10px;
-        font-size: 14px;
-        color: #606266;
+    border: 1px solid #dcdfe6;
+    color: #606266;
+    -webkit-appearance: none;
+    text-align: center;
+    box-sizing: border-box;
+    outline: 0;
+    margin: 0;
+    transition: 0.1s;
+    font-weight: 500;
+    padding: 9px 15px;
+    font-size: 12px;
+    border-radius: 3px;
+    margin-left: 10px;
 
-        input {
-            width: 50px;
-            margin-left: 10px;
-            outline: none;
-            padding: 0 5px;
-            border: 1px solid #ddd;
-            color: #606266;
-        }
-
-        span {
-            margin-left: 10px;
-        }
+    &:active {
+      color: #3a8ee6;
+      border-color: #3a8ee6;
+      outline: 0;
     }
 
-    .insert {
-        display: inline-block;
-        line-height: 1;
-        white-space: nowrap;
-        cursor: pointer;
-        background: #FFF;
-        border: 1px solid #DCDFE6;
-        color: #606266;
-        -webkit-appearance: none;
-        text-align: center;
-        box-sizing: border-box;
-        outline: 0;
-        margin: 0;
-        transition: .1s;
-        font-weight: 500;
-        padding: 9px 15px;
-        font-size: 12px;
-        border-radius: 3px;
-        margin-left: 10px;
-
-        &:active {
-            color: #3a8ee6;
-            border-color: #3a8ee6;
-            outline: 0;
-        }
-
-        &:hover {
-            background-color: #ecf5ff;
-            color: #3a8ee6;
-        }
+    &:hover {
+      background-color: #ecf5ff;
+      color: #3a8ee6;
     }
+  }
+  .icon-info{
+    font-size: 24px;
+    color: #409eff;
+  }
 }
 </style>

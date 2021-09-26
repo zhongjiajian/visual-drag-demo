@@ -1,7 +1,7 @@
 <template>
     <div class="home">
 
-        <Toolbar />
+        <Toolbar :pageInfo="pageInfo" />
 
         <main>
             <!-- 左侧组件列表 -->
@@ -50,12 +50,19 @@ import { mapState } from 'vuex'
 import generateID from '@/utils/generateID'
 import { listenGlobalKeyDown } from '@/utils/shortcutKey'
 
+import toast from '@/utils/toast'
+import { getPageInfo } from '@/api'
+
 export default {
     components: { Editor, ComponentList, AttrList, AnimationList, EventList, Toolbar },
     data() {
         return {
             activeName: 'attr',
             reSelectAnimateIndex: undefined,
+            pageInfo: {
+                title: '1',
+                uname: '',
+            },
         }
     },
     computed: mapState([
@@ -69,6 +76,9 @@ export default {
         this.restore()
         // 全局监听按键事件
         listenGlobalKeyDown()
+    },
+    mounted() {
+        this.getPageInfo()
     },
     methods: {
         restore() {
@@ -122,6 +132,18 @@ export default {
             // 0 左击 1 滚轮 2 右击
             if (e.button != 2) {
                 this.$store.commit('hideContextMenu')
+            }
+        },
+        async getPageInfo() {
+            const pageId = this.$router.history.current.params.id
+            if (pageId) {
+                const { data: pageInfoData } = await getPageInfo(pageId)
+                if (pageInfoData.code === 200) {
+                    this.pageInfo = {
+                        title: pageInfoData.data.title,
+                        uname: pageInfoData.data.uid.name,
+                    }
+                }
             }
         },
     },

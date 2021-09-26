@@ -1,0 +1,1 @@
+export const baseUrl = process.env.NODE_ENV === 'production' ? 'https://burgeon.da156.com/api' : 'http://localhost:3002'
