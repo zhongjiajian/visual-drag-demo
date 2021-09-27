@@ -46,7 +46,7 @@ export default {
                 password: 'dayi@2019!',
                 code: '',
             },
-            svg: '',
+            svg: '图形验证码',
         }
     },
 
@@ -134,8 +134,11 @@ export default {
     .captcha {
       position: absolute;
       right: -9px;
-      width: 150;
-     height: 38;
+      width: 150px;
+      height: 38px;
+      color: #ccc;
+      text-align: center;
+      line-height: 38px;
     }
   }
 }

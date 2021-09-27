@@ -30,6 +30,20 @@
         >解锁</el-button
       >
       <div class="canvas-config">
+        <span>布局</span>
+        <div style="display:inline-block;width:85px;margin-left:10px;">
+          <el-select v-model="canvasStyleData.layoutMode" placeholder="请选择" @change="layoutModeChange">
+            <el-option
+              v-for="item in layouts"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </div>
+      </div>
+      <div class="canvas-config" v-if="canvasStyleData.layoutMode==1">
         <span>画布大小</span>
         <input v-model="canvasStyleData.width" />
         <span>*</span>
@@ -45,11 +59,11 @@
       <el-popover placement="bottom" width="200" trigger="hover">
         <div>
           <div>
-            <span>标题：{{pageInfo.title}}</span>
+            <span>标题：{{ pageInfo.title }}</span>
             <span></span>
           </div>
           <div>
-            <span>创建人：{{pageInfo.uname}}</span>
+            <span>创建人：{{ pageInfo.uname }}</span>
             <span></span>
           </div>
         </div>
@@ -72,6 +86,7 @@ import Preview from '@/components/Editor/Preview'
 import { commonStyle, commonAttr } from '@/custom-component/component-list'
 import eventBus from '@/utils/eventBus'
 import User from '@/components/User'
+import { updatePage } from '@/api'
 
 export default {
     components: { Preview, User },
@@ -79,7 +94,6 @@ export default {
         pageInfo: {
             type: Object,
         },
-        
     },
     data() {
         return {
@@ -93,6 +107,16 @@ export default {
                 'borderWidth',
             ],
             timer: null,
+            layouts: [
+                {
+                    value: '1',
+                    label: '固定',
+                },
+                {
+                    value: '2',
+                    label: 'auto',
+                },
+            ],
         }
     },
     computed: mapState([
@@ -196,9 +220,35 @@ export default {
         handlePreviewChange() {
             this.$store.commit('setEditMode', 'edit')
         },
+        // 布局切换 auto布局隐藏画布大小和画布比例，画布宽高设置为auto
+        layoutModeChange(type) {
+            // if (type === '1') {
+              
+            // } else {
 
+            // }
+        },
         update() {
-            
+            let that = this
+            this.$confirm('确定保存么', '提示', {
+                type: 'info',
+                closeOnClickModal: false,
+                async callback(type) {
+                    if (type === 'confirm') {
+                        console.log(that.pageInfo)
+                        const { data: updatePageData } = await updatePage({
+                            id: that.pageInfo._id,
+                            content: {
+                                canvasStyle: that.canvasStyleData,
+                                canvasData: that.componentData,
+                            },
+                        })
+                        if (updatePageData.code === 200) {
+                            toast('保存成功', 'success')
+                        }
+                    }
+                },
+            })
         },
     },
 }
@@ -270,7 +320,7 @@ export default {
       color: #3a8ee6;
     }
   }
-  .icon-info{
+  .icon-info {
     font-size: 24px;
     color: #409eff;
   }

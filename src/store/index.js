@@ -26,6 +26,7 @@ const data = {
 
         editMode: 'edit', // 编辑器模式 edit preview
         canvasStyleData: { // 页面全局数据
+            layoutMode: '1', // 页面布局方式 1固定 2auto
             width: 1200,
             height: 740,
             scale: 100,

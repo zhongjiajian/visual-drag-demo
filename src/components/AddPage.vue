@@ -37,8 +37,9 @@ export default {
     },
     methods: {
         showDialog() {
-            if (!this.$store.state.isLogin) return toast('请先登录', 'info')
+            if (!this.$store.state.isLogin) return toast('请先登录', 'warning')
             this.dialogVisible = true
+            this.adding = false
         },
         async addPage() {
             let that = this

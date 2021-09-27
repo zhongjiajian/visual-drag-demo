@@ -73,22 +73,22 @@ export default {
         'editor',
     ]),
     created() {
-        this.restore()
+        this.initPage()
         // 全局监听按键事件
         listenGlobalKeyDown()
     },
     mounted() {
-        this.getPageInfo()
+        // this.getPageInfo()
     },
     methods: {
+
         restore() {
             // 用保存的数据恢复画布
-            if (localStorage.getItem('canvasData')) {
-                this.$store.commit('setComponentData', this.resetID(JSON.parse(localStorage.getItem('canvasData'))))
-            }
-
             if (localStorage.getItem('canvasStyle')) {
                 this.$store.commit('setCanvasStyle', JSON.parse(localStorage.getItem('canvasStyle')))
+            }
+            if (localStorage.getItem('canvasData')) {
+                this.$store.commit('setComponentData', this.resetID(JSON.parse(localStorage.getItem('canvasData'))))
             }
         },
 
@@ -134,7 +134,8 @@ export default {
                 this.$store.commit('hideContextMenu')
             }
         },
-        async getPageInfo() {
+        async initPage() {
+            let that = this
             const pageId = this.$router.history.current.params.id
             if (pageId) {
                 const { data: pageInfoData } = await getPageInfo(pageId)
@@ -142,6 +143,24 @@ export default {
                     this.pageInfo = {
                         title: pageInfoData.data.title,
                         uname: pageInfoData.data.uid.name,
+                        _id: pageInfoData.data._id,
+                    }
+                    if (pageInfoData.data.content && pageInfoData.data.content.canvasStyle) {
+                        this.$store.commit('setCanvasStyle', pageInfoData.data.content.canvasStyle)
+                    }
+                    if (pageInfoData.data.content && pageInfoData.data.content.canvasData) {
+                        this.$store.commit('setComponentData', this.resetID(pageInfoData.data.content.canvasData))
+                    }
+                    if (localStorage.getItem('canvasData') || localStorage.getItem('canvasStyle')) {
+                        this.$confirm('检测到本地缓存，是否使用', '提示', {
+                            type: 'info',
+                            closeOnClickModal: false,
+                            callback(type) {
+                                if (type === 'confirm') that.restore()
+                                localStorage.removeItem('canvasStyle')
+                                localStorage.removeItem('canvasData')
+                            },
+                        })
                     }
                 }
             }

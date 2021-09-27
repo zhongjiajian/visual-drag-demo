@@ -20,7 +20,7 @@ axios.interceptors.response.use(null, (error) => {
     // Do something with response error
     if (error.message === 'Request failed with status code 401') {
         store.commit('logout')
-        toast('请登录', 'info')
+        toast('请登录', 'warning')
     }
     if (error.message === 'Request failed with status code 500') {
         toast('服务器异常')
@@ -71,6 +71,15 @@ export function deletePage(params) {
     return axios({
         method: 'post',
         url: baseUrl + '/page/deletePage',
+        data: params,
+    })
+}
+
+// 删除页面
+export function updatePage(params) {
+    return axios({
+        method: 'post',
+        url: baseUrl + '/page/updatePage',
         data: params,
     })
 }
