@@ -1,17 +1,23 @@
 <template>
     <div class="editor" id="editor"
         :class="{ edit: isEdit }"
-        :style="{
+        :style="canvasStyleData.layoutMode==='1'?{
             width: canvasStyleData.width*canvasStyleData.scale/100 + 'px',
             height: canvasStyleData.height*canvasStyleData.scale/100 + 'px',
+        }:{
+            width: '100%',
+            height: '9999px',
         }"
         @contextmenu="handleContextMenu"
         @mousedown="handleMouseDown"
     >
-        <div class="scale-wrap" :style="{
+        <div class="scale-wrap" :style="canvasStyleData.layoutMode==='1'?{
                 width: canvasStyleData.width + 'px',
                 height: canvasStyleData.height + 'px',
                 transform: 'scale3d('+ canvasStyleData.scale/100 +','+canvasStyleData.scale/100+',1)'
+            }:{
+                width: '100%',
+                height: '100%',
             }">
             <!-- 网格线 -->
             <Grid />

@@ -53,7 +53,6 @@ export default {
 
         remove(rowData, tableData) {
             console.log(rowData)
-            let that = this
             this.$confirm('确认删除吗', '提示', {
                 type: 'warning',
                 async callback(txt) {
@@ -68,7 +67,7 @@ export default {
             })
         },
 
-        edit(rowData, tableData) {
+        edit(rowData) {
             this.$router.push({ name: 'Home', params: { id: rowData.row._id } })
         },
         async getPages() {

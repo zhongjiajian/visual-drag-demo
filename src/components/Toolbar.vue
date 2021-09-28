@@ -33,6 +33,7 @@
         <span>布局</span>
         <div style="display:inline-block;width:85px;margin-left:10px;">
           <el-select v-model="canvasStyleData.layoutMode" placeholder="请选择" @change="layoutModeChange">
+
             <el-option
               v-for="item in layouts"
               :key="item.value"
@@ -43,13 +44,13 @@
           </el-select>
         </div>
       </div>
-      <div class="canvas-config" v-if="canvasStyleData.layoutMode==1">
+      <div class="canvas-config" v-if="canvasStyleData.layoutMode==='1'">
         <span>画布大小</span>
         <input v-model="canvasStyleData.width" />
         <span>*</span>
         <input v-model="canvasStyleData.height" />
       </div>
-      <div class="canvas-config">
+      <div class="canvas-config"  v-if="canvasStyleData.layoutMode==='1'">
         <span>画布比例</span>
         <input type="number" v-model="canvasStyleData.scale" /> %
       </div>
@@ -222,11 +223,11 @@ export default {
         },
         // 布局切换 auto布局隐藏画布大小和画布比例，画布宽高设置为auto
         layoutModeChange(type) {
-            // if (type === '1') {
-              
-            // } else {
-
-            // }
+            if (type === '1') {
+                console.log('layoutModeChange', type)
+            } else {
+                console.log('layoutModeChange', type)
+            }
         },
         update() {
             let that = this

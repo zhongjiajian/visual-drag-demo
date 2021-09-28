@@ -73,6 +73,7 @@ export default {
         'editor',
     ]),
     created() {
+        this.initStore()
         this.initPage()
         // 全局监听按键事件
         listenGlobalKeyDown()
@@ -81,7 +82,15 @@ export default {
         // this.getPageInfo()
     },
     methods: {
-
+        initStore() {
+            this.$store.commit('setCanvasStyle', { 
+                layoutMode: '1', 
+                width: 1200,
+                height: 740,
+                scale: 100,
+            })
+            this.$store.commit('setComponentData', [])
+        },
         restore() {
             // 用保存的数据恢复画布
             if (localStorage.getItem('canvasStyle')) {
