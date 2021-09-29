@@ -25,7 +25,7 @@
             <!--页面组件列表展示-->
             <Shape v-for="(item, index) in componentData"
                 :defaultStyle="item.style"
-                :style="getShapeStyle(item.style)"
+                :style="getShapeStyle(item.style,item.expandStyle)"
                 :key="item.id"
                 :active="item.id === (curComponent || {}).id"
                 :element="item"
@@ -268,7 +268,7 @@ export default {
             this.$store.commit('showContextMenu', { top, left })
         },
 
-        getShapeStyle(style) {
+        getShapeStyle(style, expandStyle) {
             const result = {};
             ['width', 'height', 'top', 'left', 'rotate'].forEach(attr => {
                 if (attr != 'rotate') {
@@ -277,8 +277,15 @@ export default {
                     result.transform = 'rotate(' + style[attr] + 'deg)'
                 }
             })
-
-            return result
+            if (!expandStyle || !expandStyle.trim()) return result
+            try {
+                let expandStyleJson = JSON.parse(expandStyle)
+                if (typeof expandStyleJson === 'object') return { ...result, ...expandStyleJson }
+                return result
+            } catch (err) {
+                console.log(err)
+                return result
+            }
         },
 
         getComponentStyle(style) {

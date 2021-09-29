@@ -28,6 +28,7 @@ const list = [
             textAlign: '',
             color: '',
         },
+        expandStyle: '',
     },
     {
         component: 'v-button', 
@@ -48,6 +49,8 @@ const list = [
             color: '',
             backgroundColor: '',
         },
+        expandStyle: '',
+
     },
     {
         component: 'Picture', 
@@ -59,6 +62,8 @@ const list = [
             height: 200,
             borderRadius: '',
         },
+        expandStyle: '',
+
     },
     {
         component: 'rect-shape',
@@ -80,6 +85,8 @@ const list = [
             borderStyle: 'solid',
             verticalAlign: 'middle',
         },
+        expandStyle: '',
+
     },
 ]
 

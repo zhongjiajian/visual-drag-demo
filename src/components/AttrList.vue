@@ -35,9 +35,23 @@
                 <el-input type="number" v-else v-model.number="curComponent.style[key]" />
             </el-form-item>
             <el-form-item label="内容" v-if="curComponent && !excludes.includes(curComponent.component)">
+                <i class="el-icon-full-screen icon-magnify" @click="magnifyContent"></i>
                 <el-input type="textarea" v-model="curComponent.propValue" />
             </el-form-item>
+            <el-form-item label="拓展样式" v-if="curComponent">
+                <i class="el-icon-full-screen icon-magnify" @click="magnifyExpandStyle"></i>
+                <el-input type="textarea" v-model="curComponent.expandStyle" />
+            </el-form-item>
         </el-form>
+
+        <!-- 内容textarea放大 -->
+        <el-dialog title="内容" :visible.sync="contentMagnifyVisible" :close-on-click-modal="false"  width="60%">
+             <el-input type="textarea"  :autosize="{ minRows: 20}" v-model="curComponent.propValue" />
+        </el-dialog>
+        <!-- 拓展样式textarea放大 -->
+         <el-dialog title="拓展样式" :visible.sync="expandStyleMagnifyVisible" :close-on-click-modal="false"  width="60%">
+             <el-input type="textarea"  :autosize="{ minRows: 20}" v-model="curComponent.expandStyle" placeholder="严格JSON格式" />
+        </el-dialog>
     </div>
 </template>
 
@@ -88,6 +102,8 @@ export default {
             ],
             selectKey: ['textAlign', 'borderStyle', 'verticalAlign'],
             attrNameData,
+            contentMagnifyVisible: false,
+            expandStyleMagnifyVisible: false,
         }
     },
     computed: {
@@ -102,6 +118,14 @@ export default {
             return this.$store.state.curComponent
         },
     },
+    methods: {
+        magnifyContent() {
+            this.contentMagnifyVisible = true
+        },
+        magnifyExpandStyle() {
+            this.expandStyleMagnifyVisible = true
+        },
+    },
 }
 </script>
 
@@ -111,5 +135,8 @@ export default {
     padding: 20px;
     padding-top: 0;
     height: 100%;
+    .icon-magnify{
+        cursor: pointer;
+    }
 }
 </style>
