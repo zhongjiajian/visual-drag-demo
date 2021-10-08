@@ -3,7 +3,7 @@
         <component
             class="component"
             :is="config.component"
-            :style="getStyle(config.style)"
+            :style="getComponentStyle(config.style,config.expandStyle)"
             :propValue="config.propValue"
             :element="config"
         />
@@ -27,8 +27,18 @@ export default {
     },
     mixins: [mixins],
     methods: {
-        getStyle,
-
+        getComponentStyle(style, expandStyle) {
+            const result = getStyle(style)
+            if (!expandStyle || !expandStyle.trim()) return result
+            try {
+                let expandStyleJson = JSON.parse(expandStyle)
+                if (typeof expandStyleJson === 'object') return { ...result, ...expandStyleJson }
+                return result
+            } catch (err) {
+                console.log(err)
+                return result
+            }
+        },
         handleClick() {
             const events = this.config.events
             Object.keys(events).forEach(event => {

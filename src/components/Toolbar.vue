@@ -236,13 +236,12 @@ export default {
                 closeOnClickModal: false,
                 async callback(type) {
                     if (type === 'confirm') {
-                        console.log(that.pageInfo)
                         const { data: updatePageData } = await updatePage({
                             id: that.pageInfo._id,
-                            content: {
+                            content: JSON.stringify({
                                 canvasStyle: that.canvasStyleData,
                                 canvasData: that.componentData,
-                            },
+                            }),
                         })
                         if (updatePageData.code === 200) {
                             toast('保存成功', 'success')

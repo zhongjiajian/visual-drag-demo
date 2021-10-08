@@ -3,9 +3,12 @@
         <el-button @click="close" class="close">关闭</el-button>
         <div class="canvas-container">
             <div class="canvas"
-                :style="{
+                 :style="canvasStyleData.layoutMode==='1'?{
                     width: canvasStyleData.width + 'px',
                     height: canvasStyleData.height + 'px',
+                }:{
+                    width: '80%',
+                    height: 'auto',
                 }"
             >
                 <ComponentWrapper

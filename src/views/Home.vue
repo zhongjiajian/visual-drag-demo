@@ -50,7 +50,6 @@ import { mapState } from 'vuex'
 import generateID from '@/utils/generateID'
 import { listenGlobalKeyDown } from '@/utils/shortcutKey'
 
-import toast from '@/utils/toast'
 import { getPageInfo } from '@/api'
 
 export default {
@@ -77,9 +76,6 @@ export default {
         this.initPage()
         // 全局监听按键事件
         listenGlobalKeyDown()
-    },
-    mounted() {
-        // this.getPageInfo()
     },
     methods: {
         initStore() {
@@ -154,11 +150,10 @@ export default {
                         uname: pageInfoData.data.uid.name,
                         _id: pageInfoData.data._id,
                     }
-                    if (pageInfoData.data.content && pageInfoData.data.content.canvasStyle) {
-                        this.$store.commit('setCanvasStyle', pageInfoData.data.content.canvasStyle)
-                    }
-                    if (pageInfoData.data.content && pageInfoData.data.content.canvasData) {
-                        this.$store.commit('setComponentData', this.resetID(pageInfoData.data.content.canvasData))
+                    if (pageInfoData.data.content) {
+                        const content = JSON.parse(pageInfoData.data.content)
+                        this.$store.commit('setCanvasStyle', content.canvasStyle)
+                        this.$store.commit('setComponentData', this.resetID(content.canvasData))
                     }
                     if (localStorage.getItem('canvasData') || localStorage.getItem('canvasStyle')) {
                         this.$confirm('检测到本地缓存，是否使用', '提示', {
@@ -182,6 +177,7 @@ export default {
 .home {
     height: 100vh;
     background: #fff;
+    overflow: hidden;
     main {
         height: calc(100% - 64px);
         position: relative;

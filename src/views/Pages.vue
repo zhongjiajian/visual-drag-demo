@@ -4,7 +4,10 @@
     <AddPage @addSuccess="getPages" />
     <div class="">
       <el-table :data="tableData" style="width: 100%" max-height="500">
-        <el-table-column fixed  show-overflow-tooltip prop="title" label="标题" width="250">
+        <el-table-column fixed  show-overflow-tooltip  label="标题" width="250">
+          <template slot-scope="scope">
+            <el-button type="text" @click.native.prevent="viewDetail(scope)">{{scope.row.title}}</el-button>
+          </template>
         </el-table-column>
         <el-table-column prop="created" label="创建时间" width="250">
         </el-table-column>
@@ -68,7 +71,12 @@ export default {
         },
 
         edit(rowData) {
+            console.log(rowData)
+
             this.$router.push({ name: 'Home', params: { id: rowData.row._id } })
+        },
+        viewDetail(rowData) {
+            this.$router.push({ name: 'Item', params: { id: rowData.row._id } })
         },
         async getPages() {
             const { data: pagesData } = await getPages({ isDel: false })

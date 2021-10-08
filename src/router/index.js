@@ -5,14 +5,19 @@ Vue.use(Router)
 
 const routes = [
     {
+        path: '/',
+        name: 'PageList',
+        component: () => import('@/views/Pages'),
+    },
+    {
         path: '/Home/:id',
         name: 'Home',
         component: () => import('@/views/Home'),
     },
     {
-        path: '/PageList',
-        name: 'PageList',
-        component: () => import('@/views/Pages'),
+        path: '/Item/:id',
+        name: 'Item',
+        component: () => import('@/views/Item'),
     },
 ]
 
