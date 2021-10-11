@@ -42,8 +42,25 @@ export default {
             if (pageId) {
                 const { data: pageInfoData } = await getPageInfo(pageId)
                 if (pageInfoData.code === 200) {
+                    document.title = pageInfoData.data.title
+                    window.setData = null
                     if (pageInfoData.data.content) {
                         const content = JSON.parse(pageInfoData.data.content)
+                        if (content.scriptData) {
+                            const script = document.createElement('script')
+                            script.textContent = content.scriptData
+                            document.head.appendChild(script)
+                        }
+                        if (window.setData) {
+                            content.canvasData = JSON.stringify(content.canvasData)
+                            for (let key in window.setData) {
+                                if (Object.prototype.hasOwnProperty.call(window.setData, key)) {
+                                    const regexp = new RegExp(`\\{\\{\\s*${key}\\s*\\}\\}`, 'g')
+                                    content.canvasData = content.canvasData.replace(regexp, window.setData[key] + '')
+                                }
+                            }
+                            content.canvasData = JSON.parse(content.canvasData)
+                        }
                         this.canvasStyleData = content.canvasStyle
                         this.componentData = this.resetID(content.canvasData)
                     }
@@ -63,4 +80,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+    .canvas-container{
+        max-width: 1024px;
+        margin: 0 auto;
+    }
 </style>

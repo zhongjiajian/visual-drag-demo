@@ -55,6 +55,8 @@
         <input type="number" v-model="canvasStyleData.scale" /> %
       </div>
       <span class="line"></span>
+      <el-button @click="showScript" size="mini" type="text">添加script</el-button>
+      <span class="line"></span>
       <el-button @click="update" size="mini" type="text">保存编辑</el-button>
       <span class="line"></span>
       <el-popover placement="bottom" width="200" trigger="hover">
@@ -76,6 +78,10 @@
 
     <!-- 预览 -->
     <Preview v-model="isShowPreview" @change="handlePreviewChange" />
+    <!-- script -->
+    <el-dialog title="脚本" :visible.sync="scriptVisible" :close-on-click-modal="false"  width="60%">
+      <el-input type="textarea"  :autosize="{ minRows: 20}" v-model="scriptData" placeholder="添加页面脚本" />
+    </el-dialog>
   </div>
 </template>
 
@@ -118,14 +124,26 @@ export default {
                     label: 'auto',
                 },
             ],
+            scriptVisible: false,
         }
     },
-    computed: mapState([
-        'componentData',
-        'canvasStyleData',
-        'areaData',
-        'curComponent',
-    ]),
+    computed: {
+        ...mapState([
+            'componentData',
+            'canvasStyleData',
+            'areaData',
+            'curComponent',
+        ]),
+        scriptData: {
+            get() {
+                return this.$store.state.scriptData
+            },
+            set(v) {
+                this.$store.commit('setScriptData', v)
+            },
+        },
+
+    },
     created() {
         eventBus.$on('preview', this.preview)
         eventBus.$on('save', this.save)
@@ -241,6 +259,7 @@ export default {
                             content: JSON.stringify({
                                 canvasStyle: that.canvasStyleData,
                                 canvasData: that.componentData,
+                                scriptData: that.scriptData,
                             }),
                         })
                         if (updatePageData.code === 200) {
@@ -249,6 +268,9 @@ export default {
                     }
                 },
             })
+        },
+        showScript() {
+            this.scriptVisible = true
         },
     },
 }

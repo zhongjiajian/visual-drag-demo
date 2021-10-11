@@ -86,6 +86,7 @@ export default {
                 scale: 100,
             })
             this.$store.commit('setComponentData', [])
+            this.$store.commit('setScriptData', '')
         },
         restore() {
             // 用保存的数据恢复画布
@@ -145,6 +146,7 @@ export default {
             if (pageId) {
                 const { data: pageInfoData } = await getPageInfo(pageId)
                 if (pageInfoData.code === 200) {
+                    document.title = pageInfoData.data.title
                     this.pageInfo = {
                         title: pageInfoData.data.title,
                         uname: pageInfoData.data.uid.name,
@@ -152,6 +154,7 @@ export default {
                     }
                     if (pageInfoData.data.content) {
                         const content = JSON.parse(pageInfoData.data.content)
+                        if (content.scriptData) this.$store.commit('setScriptData', content.scriptData)
                         this.$store.commit('setCanvasStyle', content.canvasStyle)
                         this.$store.commit('setComponentData', this.resetID(content.canvasData))
                     }
