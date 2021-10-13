@@ -79,8 +79,8 @@
     <!-- 预览 -->
     <Preview v-model="isShowPreview" @change="handlePreviewChange" />
     <!-- script -->
-    <el-dialog title="脚本" :visible.sync="scriptVisible" :close-on-click-modal="false"  width="60%">
-      <el-input type="textarea"  :autosize="{ minRows: 20}" v-model="scriptData" placeholder="添加页面脚本" />
+    <el-dialog title="脚本" :visible.sync="scriptVisible" :close-on-click-modal="false"  width="880px" @close="scriptDialogClose">
+      <div id="container" ></div>
     </el-dialog>
   </div>
 </template>
@@ -94,6 +94,11 @@ import { commonStyle, commonAttr } from '@/custom-component/component-list'
 import eventBus from '@/utils/eventBus'
 import User from '@/components/User'
 import { updatePage } from '@/api'
+
+import 'monaco-editor/esm/vs/editor/browser/controller/coreCommands.js'
+import 'monaco-editor/esm/vs/editor/contrib/find/findController.js'
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api.js'
+import 'monaco-editor/esm/vs/basic-languages/javascript/javascript.contribution.js'
 
 export default {
     components: { Preview, User },
@@ -148,6 +153,9 @@ export default {
         eventBus.$on('preview', this.preview)
         eventBus.$on('save', this.save)
         eventBus.$on('clearCanvas', this.clearCanvas)
+    },
+    mounted() {
+        this.initMonacoEnvironment()
     },
     methods: {
         lock() {
@@ -271,8 +279,39 @@ export default {
         },
         showScript() {
             this.scriptVisible = true
+            this.$nextTick(this.initEditor)
+        },
+        initMonacoEnvironment() {
+            // eslint-disable-next-line no-restricted-globals
+            self.MonacoEnvironment = {
+                getWorkerUrl(moduleId, label) {
+                    if (label === 'typescript' || label === 'javascript') {
+                        return './ts.worker.bundle.js'
+                    }
+                    return './editor.worker.bundle.js'
+                },
+               
+            }
+        },
+        initEditor() {
+            if (!this.editor) {
+                this.editor = monaco.editor.create(document.getElementById('container'), {
+                    /* eslint-disable no-tabs */
+                    value: [this.scriptData].join('\n'),
+                    language: 'javascript',
+                    theme: 'vs-dark',
+                })
+            } else {
+                const value = [this.scriptData].join('\n')
+                this.editor.setValue(value)
+            }
+        },
+        scriptDialogClose() {
+            this.scriptData = this.editor.getValue()
+            console.log(this.scriptData)
         },
     },
+
 }
 </script>
 
@@ -347,4 +386,7 @@ export default {
     color: #409eff;
   }
 }
+ #container{
+    height: 480px;
+  }
 </style>
