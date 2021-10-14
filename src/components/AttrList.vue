@@ -75,7 +75,8 @@
       title="内容"
       :visible.sync="contentMagnifyVisible"
       :close-on-click-modal="false"
-      width="880px"
+      width="1100px"
+      fullscreen
       @close="htmlDialogClose"
     >
       <div id="html-editor-container"></div>
@@ -94,8 +95,6 @@
 </template>
 
 <script>
-/* eslint-disable no-restricted-globals */
-
 import attrNameData from '@/utils/attrNameData'
 
 import 'monaco-editor/esm/vs/editor/browser/controller/coreCommands.js'
@@ -182,8 +181,8 @@ export default {
             this.$nextTick(this.initCssEditor)
         },
         initMonacoEnvironment() {
-            if (!self.MonacoEnvironment) {
-                self.MonacoEnvironment = {
+            if (!window.MonacoEnvironment) {
+                window.MonacoEnvironment = {
                     getWorkerUrl(moduleId, label) {
                         if (label === 'json') {
                             return './json.worker.bundle.js'
@@ -211,10 +210,10 @@ export default {
                 this.cssEditor = monaco.editor.create(
                     document.getElementById('css-editor-container'),
                     {
-                        /* eslint-disable no-tabs */
                         value: [this.curComponent.expandStyle].join('\n'),
                         language: 'json',
                         theme: 'vs-dark',
+                        automaticLayout: true,
                     },
                 )
             } else {
@@ -227,16 +226,16 @@ export default {
         },
         initHtmlEditor() {
             if (!this.htmlEditor) {
-                console.log()
                 this.htmlEditor = monaco.editor.create(
                     document.getElementById('html-editor-container'),
                     {
-                        /* eslint-disable no-tabs */
                         value: [this.curComponent.propValue.replaceAll('<br>', '\n')].join('\n'),
                         language: 'html',
                         theme: 'vs-dark',
+                        automaticLayout: true,
                     },
                 )
+                window.htmlEditor = this.htmlEditor
             } else {
                 const value = [this.curComponent.propValue.propValue.replaceAll('<br>', '\n')].join('\n')
                 this.htmlEditor.setValue(value)
@@ -259,7 +258,9 @@ export default {
     cursor: pointer;
   }
 }
-#html-editor-container,
+#html-editor-container{
+  height: 660px;
+}
 #css-editor-container {
   height: 480px;
 }

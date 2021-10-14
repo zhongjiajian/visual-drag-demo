@@ -86,8 +86,6 @@
 </template>
 
 <script>
-/* eslint-disable no-restricted-globals */
-
 import generateID from '@/utils/generateID'
 import toast from '@/utils/toast'
 import { mapState } from 'vuex'
@@ -284,8 +282,8 @@ export default {
             this.$nextTick(this.initEditor)
         },
         initMonacoEnvironment() {
-            if (!self.MonacoEnvironment) {
-                self.MonacoEnvironment = {
+            if (!window.MonacoEnvironment) {
+                window.MonacoEnvironment = {
                     getWorkerUrl(moduleId, label) {
                         if (label === 'json') {
                             return './json.worker.bundle.js'
@@ -308,10 +306,10 @@ export default {
         initEditor() {
             if (!this.editor) {
                 this.editor = monaco.editor.create(document.getElementById('script-editor-container'), {
-                    /* eslint-disable no-tabs */
                     value: [this.scriptData].join('\n'),
                     language: 'javascript',
                     theme: 'vs-dark',
+                    automaticLayout: true,
                 })
             } else {
                 const value = [this.scriptData].join('\n')
