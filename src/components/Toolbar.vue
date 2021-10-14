@@ -80,12 +80,14 @@
     <Preview v-model="isShowPreview" @change="handlePreviewChange" />
     <!-- script -->
     <el-dialog title="脚本" :visible.sync="scriptVisible" :close-on-click-modal="false"  width="880px" @close="scriptDialogClose">
-      <div id="container" ></div>
+      <div id="script-editor-container" ></div>
     </el-dialog>
   </div>
 </template>
 
 <script>
+/* eslint-disable no-restricted-globals */
+
 import generateID from '@/utils/generateID'
 import toast from '@/utils/toast'
 import { mapState } from 'vuex'
@@ -282,20 +284,30 @@ export default {
             this.$nextTick(this.initEditor)
         },
         initMonacoEnvironment() {
-            // eslint-disable-next-line no-restricted-globals
-            self.MonacoEnvironment = {
-                getWorkerUrl(moduleId, label) {
-                    if (label === 'typescript' || label === 'javascript') {
-                        return './ts.worker.bundle.js'
-                    }
-                    return './editor.worker.bundle.js'
-                },
+            if (!self.MonacoEnvironment) {
+                self.MonacoEnvironment = {
+                    getWorkerUrl(moduleId, label) {
+                        if (label === 'json') {
+                            return './json.worker.bundle.js'
+                        }
+                        if (label === 'css' || label === 'scss' || label === 'less') {
+                            return './css.worker.bundle.js'
+                        }
+                        if (label === 'html' || label === 'handlebars' || label === 'razor') {
+                            return './html.worker.bundle.js'
+                        }
+                        if (label === 'typescript' || label === 'javascript') {
+                            return './ts.worker.bundle.js'
+                        }
+                        return './editor.worker.bundle.js'
+                    },
                
+                } 
             }
         },
         initEditor() {
             if (!this.editor) {
-                this.editor = monaco.editor.create(document.getElementById('container'), {
+                this.editor = monaco.editor.create(document.getElementById('script-editor-container'), {
                     /* eslint-disable no-tabs */
                     value: [this.scriptData].join('\n'),
                     language: 'javascript',
@@ -308,7 +320,6 @@ export default {
         },
         scriptDialogClose() {
             this.scriptData = this.editor.getValue()
-            console.log(this.scriptData)
         },
     },
 
@@ -386,7 +397,7 @@ export default {
     color: #409eff;
   }
 }
- #container{
+ #script-editor-container{
     height: 480px;
   }
 </style>
