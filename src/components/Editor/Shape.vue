@@ -2,7 +2,7 @@
     <div class="shape" :class="{ active }" @click="selectCurComponent" @mousedown="handleMouseDownOnShape">
         <span class="iconfont icon-xiangyouxuanzhuan" v-show="isActive()" @mousedown="handleRotate"></span>
         <span class="iconfont icon-suo" v-show="element.isLock"></span>
-        <template v-if="curComponent && !curComponent.expandStyle.trim()">
+        <template v-if="curComponent && (!curComponent.expandStyle || !curComponent.expandStyle.trim())">
             <div
                 class="shape-point"
                 v-for="item in (isActive()? pointList : [])"
@@ -358,6 +358,7 @@ export default {
 .active {
     outline: 1px solid #70c0ff;
     user-select: none;
+    outline-offset: -1px;
 }
 .shape-point {
     position: absolute;

@@ -78,10 +78,3 @@ export default {
 
 }
 </script>
-
-<style lang="scss" scoped>
-    .canvas-container{
-        max-width: 1024px;
-        margin: 0 auto;
-    }
-</style>

@@ -100,8 +100,8 @@ import attrNameData from '@/utils/attrNameData'
 import 'monaco-editor/esm/vs/editor/browser/controller/coreCommands.js'
 import 'monaco-editor/esm/vs/editor/contrib/find/findController.js'
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api.js'
-import 'monaco-editor/esm/vs/language/css/monaco.contribution.js'
-import 'monaco-editor/esm/vs/basic-languages/css/css.contribution.js'
+// import 'monaco-editor/esm/vs/language/css/monaco.contribution.js'
+// import 'monaco-editor/esm/vs/basic-languages/css/css.contribution.js'
 import 'monaco-editor/esm/vs/language/html/monaco.contribution.js'
 import 'monaco-editor/esm/vs/basic-languages/html/html.contribution.js'
 import 'monaco-editor/esm/vs/language/json/monaco.contribution.js'
@@ -237,7 +237,7 @@ export default {
                 )
                 window.htmlEditor = this.htmlEditor
             } else {
-                const value = [this.curComponent.propValue.propValue.replaceAll('<br>', '\n')].join('\n')
+                const value = [this.curComponent.propValue.replaceAll('<br>', '\n')].join('\n')
                 this.htmlEditor.setValue(value)
             }
         },
