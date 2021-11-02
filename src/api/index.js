@@ -48,12 +48,38 @@ export function login(params) {
     })
 }
 
-// 获取页面列表
+// 获取页面列表-stable
 export function getPages(params) {
     return axios({
         method: 'post',
-        url: baseUrl + '/public/getPages',
+        url: baseUrl + '/public/stable/getPages',
         data: params,
+    })
+}
+
+// 获取页面信息-stable
+export function getPageInfo(id) {
+    return axios({
+        method: 'post',
+        url: baseUrl + '/public/stable/getPageInfo',
+        data: { id },
+    })
+}
+// 获取页面列表-prod
+export function getProdPages(params) {
+    return axios({
+        method: 'post',
+        url: baseUrl + '/public/prod/getPages',
+        data: params,
+    })
+}
+
+// 获取页面信息-prod
+export function getProdPageInfo(id) {
+    return axios({
+        method: 'post',
+        url: baseUrl + '/public/prod/getPageInfo',
+        data: { id },
     })
 }
 
@@ -84,11 +110,11 @@ export function updatePage(params) {
     })
 }
 
-// 获取页面信息
-export function getPageInfo(id) {
+// 发布页面
+export function publishPage(params) {
     return axios({
         method: 'post',
-        url: baseUrl + '/public/getPageInfo',
-        data: { id },
+        url: baseUrl + '/page/publishPage',
+        data: params,
     })
 }

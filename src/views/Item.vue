@@ -22,7 +22,7 @@
 import ComponentWrapper from '@/components/Editor/ComponentWrapper'
 import generateID from '@/utils/generateID'
 
-import { getPageInfo } from '@/api'
+import { getPageInfo, getProdPageInfo } from '@/api'
 
 export default {
     components: { ComponentWrapper },
@@ -39,8 +39,12 @@ export default {
     methods: {
         async initPage() {
             const pageId = this.$router.history.current.params.id
+            const env = this.$router.history.current.params.env
             if (pageId) {
-                const { data: pageInfoData } = await getPageInfo(pageId)
+                let result = {}
+                if (env === 'stable') result = await getPageInfo(pageId) 
+                else result = await getProdPageInfo(pageId)
+                const pageInfoData = result.data
                 if (pageInfoData.code === 200) {
                     document.title = pageInfoData.data.title
                     window.setData = null

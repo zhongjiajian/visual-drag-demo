@@ -15,7 +15,7 @@ const routes = [
         component: () => import('@/views/Home'),
     },
     {
-        path: '/Item/:id',
+        path: '/Item/:env/:id',
         name: 'Item',
         component: () => import('@/views/Item'),
     },

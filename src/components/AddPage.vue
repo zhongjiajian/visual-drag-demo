@@ -2,7 +2,7 @@
   <div class="addPage">
     <div class="header">
       <h1 class="title">发 芽 🌱 🌱 🌱 ———— 低 代 码 平 台</h1>
-      <el-button class="add-btn" @click="showDialog">新建页面</el-button>
+      <el-button class="add-btn" @click="showDialog" size="medium">新建页面</el-button>
     </div>
     <el-dialog title="新建" :visible.sync="dialogVisible" width="500px">
       <div class="form-item">
@@ -77,12 +77,14 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 40px;
+    padding: 40px 40px 20px;
+    background: #d6e1d6;
     h1 {
       font-size: 22px;
     }
     .add-btn {
       width: 180px;
+      margin-top: 20px;
     }
   }
   .form-item {
